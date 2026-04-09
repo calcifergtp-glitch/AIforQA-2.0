@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00e5ff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#a855f7" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="c2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a855f7" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#00e5ff" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="crisp" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Keep the center clean: all design lives near the borders -->
+  <g fill="none" stroke="url(#c)" stroke-width="2.2" opacity="0.55" filter="url(#crisp)">
+    <!-- Top border traces -->
+    <path d="M60 80 H420 Q460 80 480 100 T520 140 V170" />
+    <path d="M560 80 H980 Q1040 80 1080 120 V180" />
+    <path d="M1120 80 H1540" />
+
+    <!-- Bottom border traces -->
+    <path d="M60 820 H340 Q420 820 460 780 V720" />
+    <path d="M520 820 H920 Q980 820 1040 780 V730" />
+    <path d="M1100 820 H1540" />
+
+    <!-- Left border traces -->
+    <path d="M80 120 V360 Q80 420 120 460 H200" />
+    <path d="M80 520 V780" />
+
+    <!-- Right border traces -->
+    <path d="M1520 120 V300 Q1520 360 1480 400 H1400" />
+    <path d="M1520 460 V780" />
+  </g>
+
+  <!-- Nodes -->
+  <g fill="#ffffff" stroke="url(#c2)" stroke-width="2" opacity="0.75">
+    <circle cx="60" cy="80" r="6"/><circle cx="420" cy="80" r="6"/><circle cx="520" cy="140" r="6"/><circle cx="560" cy="80" r="6"/>
+    <circle cx="980" cy="80" r="6"/><circle cx="1080" cy="120" r="6"/><circle cx="1120" cy="80" r="6"/><circle cx="1540" cy="80" r="6"/>
+
+    <circle cx="60" cy="820" r="6"/><circle cx="340" cy="820" r="6"/><circle cx="460" cy="780" r="6"/><circle cx="520" cy="820" r="6"/>
+    <circle cx="920" cy="820" r="6"/><circle cx="1040" cy="780" r="6"/><circle cx="1100" cy="820" r="6"/><circle cx="1540" cy="820" r="6"/>
+
+    <circle cx="80" cy="120" r="6"/><circle cx="80" cy="360" r="6"/><circle cx="120" cy="460" r="6"/><circle cx="80" cy="520" r="6"/>
+    <circle cx="80" cy="780" r="6"/>
+
+    <circle cx="1520" cy="120" r="6"/><circle cx="1520" cy="300" r="6"/><circle cx="1480" cy="400" r="6"/>
+    <circle cx="1520" cy="460" r="6"/><circle cx="1520" cy="780" r="6"/>
+  </g>
+
+  <!-- Corner accents -->
+  <g fill="none" stroke="url(#c)" stroke-width="2.4" opacity="0.35">
+    <path d="M40 40 H240" />
+    <path d="M40 40 V220" />
+    <path d="M1560 40 H1360" />
+    <path d="M1560 40 V220" />
+    <path d="M40 860 H240" />
+    <path d="M40 860 V680" />
+    <path d="M1560 860 H1360" />
+    <path d="M1560 860 V680" />
+  </g>
+</svg>
