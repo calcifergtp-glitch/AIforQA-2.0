@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard • AI for QA</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    .adminWrap { max-width: 760px; margin: 2.4rem auto; padding: 0 1.2rem 4rem; }
+    .adminCard {
+      border-radius: 18px;
+      border: 1px solid rgba(0,229,255,.18);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 18px 60px rgba(15,30,60,.10);
+      padding: 2rem 2rem 2.2rem;
+      margin-top: 1.6rem;
+    }
+    .adminCard h2 { margin: 0 0 1.2rem; font-size: 1.25rem; }
+    .field { margin-bottom: 1.1rem; }
+    .field label { display:block; font-weight: 700; color: rgba(11,16,32,.72); margin-bottom: .35rem; font-size: .93rem; }
+    .field input[type="text"],
+    .field input[type="password"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: .78rem .95rem;
+      border-radius: 14px;
+      border: 1px solid rgba(8,21,54,.12);
+      background: rgba(255,255,255,.96);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .field textarea { min-height: 280px; resize: vertical; line-height: 1.65; }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: rgba(0,229,255,.36);
+      box-shadow: 0 0 0 4px rgba(0,229,255,.10);
+    }
+    .btnRow { display:flex; gap: .8rem; margin-top: 1.4rem; flex-wrap: wrap; align-items: center; }
+    .statusMsg {
+      border-radius: 12px;
+      padding: .75rem 1rem;
+      margin-top: 1.1rem;
+      font-size: .93rem;
+      display: none;
+    }
+    .statusMsg.error { background: rgba(255,80,80,.08); border: 1px solid rgba(255,80,80,.20); color: #c0392b; }
+    .statusMsg.success { background: rgba(52,211,153,.08); border: 1px solid rgba(52,211,153,.20); color: #0d6e4f; }
+    .statusMsg.info { background: rgba(0,229,255,.06); border: 1px solid rgba(0,229,255,.18); color: rgba(11,16,32,.72); }
+    #loginSection { display: block; }
+    #editorSection { display: none; }
+    .userBadge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(52,211,153,.28);
+      background: rgba(52,211,153,.07);
+      font-size: .9rem; font-weight: 700; color: rgba(11,16,32,.72);
+    }
+    .userBadge img { width: 24px; height: 24px; border-radius: 999px; }
+    .tokenHint { font-size: .82rem; color: rgba(11,16,32,.55); margin-top: .3rem; }
+    .tokenHint a { color: rgba(0,180,220,.85); border-bottom: 1px solid rgba(0,229,255,.25); }
+  </style>
+</head>
+<body>
+  <div class="bg"><div class="grid"></div><div class="lines" aria-hidden="true"></div></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span class="brandMark" aria-hidden="true"></span>
+      <span class="brandText">AI for QA</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="pages/best-of.html">Posts</a>
+      <a href="index.html">Home</a>
+    </nav>
+    <div class="actions" id="headerUser"></div>
+  </header>
+
+  <main class="adminWrap">
+    <h1 class="h1">Admin Dashboard</h1>
+    <p>Publish new articles directly to the GitHub repository. Only the repository owner can access this page.</p>
+
+    <!-- ── Login section ───────────────────────────────────────────────────── -->
+    <div class="adminCard" id="loginSection">
+      <h2>🔐 GitHub Login</h2>
+      <p>Enter your GitHub Personal Access Token to authenticate. The token is used only in this browser session and is never stored.</p>
+
+      <div class="field">
+        <label for="tokenInput">Personal Access Token</label>
+        <input type="password" id="tokenInput" placeholder="ghp_…" autocomplete="off" />
+        <div class="tokenHint">
+          Need a token?
+          <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=AIforQA+Admin" target="_blank" rel="noopener noreferrer">Create one on GitHub</a>
+          — select the <strong>repo</strong> and <strong>workflow</strong> scopes.
+        </div>
+      </div>
+
+      <div class="btnRow">
+        <button class="btn" id="loginBtn" type="button">Login with Token</button>
+      </div>
+
+      <div class="statusMsg" id="loginStatus"></div>
+    </div>
+
+    <!-- ── Article editor section ──────────────────────────────────────────── -->
+    <div class="adminCard" id="editorSection">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem; margin-bottom:1.2rem;">
+        <h2 style="margin:0;">✏️ New Article</h2>
+        <div id="userBadgeEl"></div>
+      </div>
+
+      <div class="field">
+        <label for="articleTitle">Article Title <span style="color:#e74c3c;">*</span></label>
+        <input type="text" id="articleTitle" placeholder="e.g. AI-Assisted Batch Record Review in GMP Environments" />
+      </div>
+
+      <div class="field">
+        <label for="articleCategory">Category <span style="color:#e74c3c;">*</span></label>
+        <select id="articleCategory">
+          <option value="Compliance">Compliance</option>
+          <option value="GxP &amp; Validation">GxP &amp; Validation</option>
+          <option value="Test Design">Test Design</option>
+          <option value="Test Automation">Test Automation</option>
+          <option value="Bug Triage">Bug Triage</option>
+          <option value="Defect Analysis">Defect Analysis</option>
+          <option value="Test Strategy">Test Strategy</option>
+          <option value="Performance">Performance</option>
+          <option value="Security Testing">Security Testing</option>
+          <option value="Accessibility">Accessibility</option>
+          <option value="Reporting">Reporting</option>
+          <option value="QA Management">QA Management</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="articleSummary">Summary (for article cards)</label>
+        <input type="text" id="articleSummary" placeholder="One or two sentences describing the article." />
+      </div>
+
+      <div class="field">
+        <label for="articleBody">
+          Article Body (HTML)
+          <span style="font-weight:400; color:rgba(11,16,32,.55); font-size:.85rem; margin-left:.4rem;">— use &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt; tags</span>
+        </label>
+        <textarea id="articleBody" placeholder="<h2>Introduction</h2>&#10;<p>Your article content here…</p>"></textarea>
+      </div>
+
+      <div class="btnRow">
+        <button class="btn" id="publishBtn" type="button">🚀 Publish Article</button>
+        <button class="btn ghost" id="logoutBtn" type="button">Logout</button>
+      </div>
+
+      <div class="statusMsg" id="editorStatus"></div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/github-api.js"></script>
+  <script>
+    'use strict';
+
+    var token = null;
+
+    var loginSection  = document.getElementById('loginSection');
+    var editorSection = document.getElementById('editorSection');
+    var loginBtn      = document.getElementById('loginBtn');
+    var loginStatus   = document.getElementById('loginStatus');
+    var publishBtn    = document.getElementById('publishBtn');
+    var logoutBtn     = document.getElementById('logoutBtn');
+    var editorStatus  = document.getElementById('editorStatus');
+    var headerUser    = document.getElementById('headerUser');
+    var userBadgeEl   = document.getElementById('userBadgeEl');
+
+    function showStatus(el, type, msg) {
+      el.textContent = msg;
+      el.className   = 'statusMsg ' + type;
+      el.style.display = 'block';
+    }
+
+    function hideStatus(el) {
+      el.style.display = 'none';
+    }
+
+    function setLoggedIn(user) {
+      loginSection.style.display  = 'none';
+      editorSection.style.display = 'block';
+
+      var badgeHtml = '<span class="userBadge">'
+        + (user.avatar_url ? '<img src="' + user.avatar_url + '" alt="" />' : '')
+        + user.login
+        + '</span>';
+      userBadgeEl.innerHTML = badgeHtml;
+      headerUser.innerHTML  = badgeHtml;
+    }
+
+    function setLoggedOut() {
+      token = null;
+      loginSection.style.display  = 'block';
+      editorSection.style.display = 'none';
+      userBadgeEl.innerHTML  = '';
+      headerUser.innerHTML   = '';
+      document.getElementById('tokenInput').value = '';
+    }
+
+    loginBtn.addEventListener('click', async function () {
+      var raw = document.getElementById('tokenInput').value.trim();
+      if (!raw) { showStatus(loginStatus, 'error', 'Please enter your Personal Access Token.'); return; }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Verifying…';
+      hideStatus(loginStatus);
+
+      try {
+        var user = await GitHubAPI.verifyOwner(raw);
+        token = raw;
+        setLoggedIn(user);
+        if (window.toast) window.toast('Logged in as ' + user.login);
+      } catch (err) {
+        showStatus(loginStatus, 'error', err.message);
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login with Token';
+      }
+    });
+
+    logoutBtn.addEventListener('click', function () {
+      setLoggedOut();
+      if (window.toast) window.toast('Logged out');
+    });
+
+    publishBtn.addEventListener('click', async function () {
+      var title    = document.getElementById('articleTitle').value.trim();
+      var category = document.getElementById('articleCategory').value;
+      var summary  = document.getElementById('articleSummary').value.trim();
+      var body     = document.getElementById('articleBody').value.trim();
+
+      if (!title) { showStatus(editorStatus, 'error', 'Article title is required.'); return; }
+      if (!body)  { showStatus(editorStatus, 'error', 'Article body cannot be empty.'); return; }
+
+      publishBtn.disabled = true;
+      publishBtn.textContent = 'Publishing…';
+      showStatus(editorStatus, 'info', 'Committing article to GitHub…');
+
+      try {
+        var result = await GitHubAPI.publishArticle(token, {
+          title:    title,
+          category: category,
+          summary:  summary,
+          bodyHtml: body
+        });
+
+        showStatus(editorStatus, 'success',
+          '✅ Article published! File committed to: ' + result.path
+          + '\nThe site will redeploy automatically via GitHub Actions.'
+        );
+        if (window.toast) window.toast('Article published!');
+
+        // Clear form fields
+        document.getElementById('articleTitle').value   = '';
+        document.getElementById('articleSummary').value = '';
+        document.getElementById('articleBody').value    = '';
+
+      } catch (err) {
+        showStatus(editorStatus, 'error', '❌ ' + err.message);
+      } finally {
+        publishBtn.disabled = false;
+        publishBtn.textContent = '🚀 Publish Article';
+      }
+    });
+
+    // Allow Enter in token input to trigger login
+    document.getElementById('tokenInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+  </script>
+</body>
+</html>
