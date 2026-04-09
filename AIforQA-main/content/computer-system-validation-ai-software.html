@@ -1,0 +1,87 @@
+<section class="article-body">
+
+  <h2>CSV Fundamentals</h2>
+
+<p>Computer System Validation (CSV) is a structured process to ensure that computerized systems used in pharmaceutical operations perform reliably and meet predefined requirements patient safety, product quality and data integrity increasingly depend on software-controlled systems. Validated systems produce accurate and consistent data, helping to prevent errors that could harm patients or compromise product quality and user requirements, progressing through design, installation (IQ), operational (OQ) and performance qualifications (PQ), and culminating in a validation report and ongoing maintenance 3 aligns with GxP risk management: critical systems (e.g. batch records, QC software) receive rigorous testing, while lower-impact systems get a lighter touch.</p>
+
+<p>GAMP 5 guidance embodies this philosophy, categorizing systems by complexity and customizing validation accordingly .</p>
+
+  <h2>Traditional CSV Documentation</h2>
+
+<p>Key deliverables in CSV include: - Validation Master Plan: Defines scope, roles, and approach for all validation activities. - User Requirements Specification (URS) / Functional Requirements (FRS) / Design Specifications (DS): Documents what the system must do (URS/FRS) and how it is implemented (DS). These trace to tests. - Risk Assessment: Evaluates how failures could impact quality/patients and determines the validation rigor needed. - Test Protocols (IQ, OQ, PQ): Step-by-step test plans and acceptance criteria for installation, functionality and performance tests. - Traceability Matrix: A table linking each requirement to one or more test cases, ensuring full coverage. - Validation Report: Summarizes all validation activities, test results, deviations and final conclusions about the system’s fitness. - SOPs and Training: Operating procedures for the system and documented training of users and operators.</p>
+
+<p>These documents provide the evidence that the system was built and tested according to GxP standards, with all deviations handled.</p>
+
+  <h2>How AI Complicates CSV</h2>
+
+<p>AI-based software challenges these norms in several ways: - Variable, Non-Deterministic Outputs: Unlike fixed logic software, AI (especially machine learning models) can produce different results on the same input, especially if there are elements of randomness. This makes it impossible to define a single “expected result” ahead of time for every test. - Learning Models: Models that are retrained or continuously updated during use can change behavior post-deployment.</p>
+
+<p>Traditional validation assumes the code under test is static; AI models may adapt over time, invalidating earlier test evidence. - Vendor Opacity: Many AI tools (particularly cloud AI services) are proprietary “black boxes.” The user may not know exactly how the model works internally, which conflicts with the transparency needed for CSV. - Impossible to Predefine All Outputs: For something like a language model or recommendation engine, the range of possible outputs is enormous.</p>
+
+<p>We cannot write test cases for every possible input. This breaks the conventional IQ/OQ/PQ testing approach. - Need for Review Strategies: Because we cannot predict AI outputs, validation often requires human review of AI-generated content. For example, testing an AI that summarizes documents might involve sampling outputs and checking quality, rather than hard-coded expected values. - Impact of Model Updates: If a vendor updates the underlying model or retrains it, the system’s behavior may change without any change to our code.</p>
+
+<p>This means we must control model versions (e.g. pin to a fixed model) and treat updates like change control events. In sum, AI’s unpredictable and evolving nature means traditional CSV must be adapted. We often validate AI components by statistical testing, monitoring and governance rather than deterministic test cases.</p>
+
+  <h2>Risk-Based Application</h2>
+
+<p>The extent of CSV needed for an AI feature depends on its intended use (risk level):</p>
+
+<ul>
+  <li>Low-Risk Uses: Examples are drafting support or summarization tools (e.g. an AI that suggests text for SOPs or literature summaries). Since humans review and approve all outputs, the CSV can be minimal. Key steps are supplier qualification, accuracy checks on typical cases, and guidance on proper use.</li>
+  <li>Medium-Risk Uses: Tools like search/retrieval or data classification that aid analysts or highlight possible items. These affect efficiency but do not directly make quality decisions. They require validation of accuracy (e.g. relevant results retrieved) and controls to ensure operators verify the AI’s suggestions.</li>
+  <li>High-Risk Uses: Functions like anomaly detection in manufacturing data or decision support for quality release. These could directly influence product quality if wrong. They need rigorous validation: well-defined performance metrics, extensive testing on historical data, and documented limits of operation. Human oversight is mandatory – the AI should assist, not replace, expert judgment.</li>
+  <li>Critical Uses: Fully automated decision-making (e.g. an AI that autonomously sets process parameters or batch approval) would be extremely high risk. Such uses would essentially need to be validated as formal processes themselves, possibly requiring regulatory review. Regulators expect the validation effort to match risk. For example, an AI “smart filter” for CAPA triage (medium risk) may have a simpler plan than an AI that predicts batch failure in real-time (high risk). This risk-based approach is aligned with existing CSV practices.</li>
+</ul>
+
+  <h2>Governance Model</h2>
+
+<p>To manage AI tools, QA/CSV teams should extend their governance to cover:</p>
+
+<ul>
+  <li>Access Controls: Restrict who can use the AI feature and in what mode. For instance, disable “self- training” features for end users to prevent untracked model updates.</li>
+  <li>Procedural Restrictions: Define approved use cases explicitly. Users should follow SOPs on when/ how to run the AI, how to interpret results, and how to document its use in controlled records.</li>
+  <li>Review Requirements: Mandate that any output impacting quality decisions be reviewed and signed off by qualified personnel. Consider implementing a two-person rule for high-impact AI outputs.</li>
+  <li>Periodic Performance Review: Similar to equipment calibration, periodically assess the AI’s performance on representative data. For example, track accuracy or false alarm rates over time. If performance degrades, investigate and retrain or revert model.</li>
+  <li>Change Control: Any modification to the AI (software updates, retraining, configuration changes) must go through formal change control. This includes changes by the vendor.</li>
+  <li>Model Documentation and Traceability: Maintain records of model versions, training data snapshots, and any tuning parameters. This mirrors version control and provides traceability for audits. In practice, an AI governance framework involves QA, IT, and data science teams. For example, one might create an “AI Quality Board” that reviews new AI tools, classifies risk, and oversees validation strategy. This cross-functional oversight is crucial given AI’s novelty in GxP contexts .</li>
+</ul>
+
+  <h2>Top 3 AI Tools/Platforms for CSV-Controlled Use</h2>
+
+<p>The following AI platforms are noted for their enterprise focus and governance features, making them more amenable to CSV: Platform Use Case Strengths Weaknesses</p>
+
+  <h2>High – Azure</h2>
+
+<p>provides infrastructure for 21 CFR 11 compliance (audit trails, encrypted logs). Validation focuses on access and data controls rather than model internals. Governance Advantages</p>
+
+  <h2>Designed for</h2>
+
+<p>regulated data curve. Native analytics. Built- focus on models (not an LLM chat service). in audit logging and model documentation help CSV.</p>
+
+<p>Governance Advantages</p>
+
+  <h2>Predictive</h2>
+
+<p>modeling and automated compliance docs</p>
+
+<ul>
+  <li>Microsoft Azure AI (OpenAI Service): Suited for AI features in business apps (e.g. summarizing batch records). Its enterprise-grade platform supports CSV via network isolation, authentication, encryption and logging. However, LLM outputs must be carefully controlled, so CSV will emphasize stringent user training and output review.</li>
+  <li>IBM Watsonx: Best for AI data pipelines and language tasks. Watsonx’s emphasis on explainability and modular deployment (cloud or on-prem) aligns well with validation. QA can leverage its fact- sheet generation to understand model behavior. Its complexity may require more technical effort.</li>
+  <li>DataRobot MLOps: Excels at building and deploying predictive models (e.g. CAPA recurrence risk). It automatically creates an “audit trail” of data prep and model decisions, which greatly aids validation. It’s less applicable for LLM tasks but strong for algorithmic AI in QMS. Each platform can enforce policies (Azure Active Directory, IBM identity, DataRobot roles) and produce audit logs of AI use – key for CSV documentation. They differ in specialization: Azure OpenAI is generative, Watsonx is a broad AI suite, and DataRobot focuses on machine learning workflows. All support enterprise security features that CSV demands.</li>
+</ul>
+
+  <h2>Final Guidance</h2>
+
+
+  <h2>When assessing an AI-enabled tool under CSV:</h2>
+
+<ul>
+  <li>Classify the risk: Determine how the AI output affects patient safety or quality. Low-risk tools need lighter CSV (focusing on data integrity), while high-risk tools require full validation.</li>
+  <li>Validate like a system: Adapt CSV V-model steps to AI. Define requirements (even if vague, e.g. “assist, not decide”), plan tests (or review strategies), document architecture, and create clear acceptance criteria (e.g. “95% of classifications match historical labels”).</li>
+  <li>Emphasize data and oversight: Ensure training data and input sources are validated. Establish procedures for human review of AI output. Document how a user should verify or override the AI.</li>
+  <li>Control changes: Lock down the AI model version in production. Any update must pass a mini- validation. If using a vendor-hosted AI, contractually require notification of model changes.</li>
+  <li>Monitor continuously: Set up performance metrics and dashboards for the AI (e.g. error rates). If drift is detected, investigate and, if needed, retire or retrain the model under a change control protocol.</li>
+  <li>Maintain documentation: Keep all model-related documentation (model files, training logs, performance reports) under version control. This aids inspections and audits. In essence, treat the AI tool as a computerized system subject to 21 CFR 11 and GMP controls. Leverage the built-in governance of enterprise AI platforms, and build a CSV strategy around intended use and risk. With careful planning, training of users, and robust oversight, AI features can be incorporated without compromising compliance. The key is balancing innovation with the discipline of validation: let AI speed up tasks but hold every result to the same standards of reliability required in pharma. Sources: Key references included peer-reviewed reviews on CSV and AI in pharma 4 and vendor literature on platform governance 4 enabled systems. 2 The Essential Guide to Computer System Validation in the Pharmaceutical Industry - PMC</li>
+</ul>
+
+</section>
