@@ -229,7 +229,8 @@
       if(!hs.length){ tocList.innerHTML = "<div style='color:rgba(11,16,32,.55)'>No sections yet.</div>"; return; }
       tocList.innerHTML = Array.from(hs).map(function(h){
         if(!h.id) h.id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-        return '<a href="#' + h.id + '">' + h.textContent + '</a>';
+        function escToc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+        return '<a href="#' + escToc(h.id) + '">' + escToc(h.textContent) + '</a>';
       }).join('');
     })();
   </script>

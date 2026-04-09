@@ -23,7 +23,10 @@
    * Convert a plain string to Base64 (required by the GitHub Contents API).
    */
   function toBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
+    // UTF-8 safe Base64 encoding (avoids deprecated unescape())
+    var bytes = new TextEncoder().encode(str);
+    var binary = Array.from(bytes, function(b){ return String.fromCharCode(b); }).join('');
+    return btoa(binary);
   }
 
   /**
